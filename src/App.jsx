@@ -74,15 +74,13 @@ const preventiveSchedule = [
 ];
 
 
-const orderTrendData = [
-  { date: "05/01", shin: 420, jin: 620, neoguri: 350, buldak: 700, japagetti: 520 },
-  { date: "05/02", shin: 510, jin: 580, neoguri: 490, buldak: 640, japagetti: 610 },
-  { date: "05/03", shin: 760, jin: 530, neoguri: 430, buldak: 760, japagetti: 590 },
-  { date: "05/04", shin: 690, jin: 610, neoguri: 570, buldak: 880, japagetti: 670 },
-  { date: "05/05", shin: 850, jin: 560, neoguri: 520, buldak: 810, japagetti: 760 },
-  { date: "05/06", shin: 980, jin: 520, neoguri: 650, buldak: 980, japagetti: 720 },
-  { date: "05/07", shin: 900, jin: 600, neoguri: 590, buldak: 1120, japagetti: 800 },
-  { date: "05/08", shin: 1100, jin: 570, neoguri: 720, buldak: 1040, japagetti: 890 },
+const inventoryTrendData = [
+  { date: "05/01", shin: 9200, jin: 8600, neoguri: 7800, buldak: 7400, japagetti: 8100 },
+  { date: "05/02", shin: 9800, jin: 8200, neoguri: 7650, buldak: 6900, japagetti: 8350 },
+  { date: "05/03", shin: 10500, jin: 7700, neoguri: 7400, buldak: 6300, japagetti: 8650 },
+  { date: "05/04", shin: 11200, jin: 7200, neoguri: 7000, buldak: 5700, japagetti: 9000 },
+  { date: "05/05", shin: 11800, jin: 6800, neoguri: 6750, buldak: 5100, japagetti: 9350 },
+  { date: "05/06", shin: 12400, jin: 6400, neoguri: 6500, buldak: 4500, japagetti: 9700 },
 ];
 
 const trendSeries = [
@@ -114,21 +112,7 @@ export default function App() {
 
   return (
     <>
-      <style>{`
-        @import url('https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css');
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        html, body, #root { width: 100%; height: 100%; }
-        body {
-          font-family: 'Pretendard', 'Noto Sans KR', system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
-          background: #ffffff;
-          color: #262626;
-          -webkit-font-smoothing: antialiased;
-          -moz-osx-font-smoothing: grayscale;
-          text-rendering: geometricPrecision;
-        }
-        button, input, table, th, td { font-family: inherit; }
-        button { cursor: pointer; }
-      `}</style>
+      <GlobalStyles />
       <div style={styles.app}>
       <aside style={styles.sidebar}>
         <div style={styles.brand}>
@@ -374,23 +358,23 @@ function AnalyticsPage() {
       <Hero
         label="DATA ANALYTICS & OPERATION INSIGHT"
         title="분석 대시보드"
-        text="CSV 주문 데이터를 기간별로 나누어 각 품목의 주문 유입 수량을 꺾은선 그래프로 시각화하고, 주문량이 높은 품목에 대해 추가 재고 확보와 공급부 운영 전략을 제안합니다."
-        statusTitle="ORDER ANALYSIS"
-        statusValue="HIGH DEMAND"
-        statusText="불닭볶음면 / 신라면 추가 물량 확보 권장"
+        text="임의 기간별 재고 변화 데이터를 꺾은선 그래프로 시각화하고, 감소 추세 품목에 대해 추가 물량 확보와 설비 운영 전략을 제안합니다."
+        statusTitle="ANALYSIS RESULT"
+        statusValue="ACTION REQUIRED"
+        statusText="불닭볶음면 / 진라면 추가 확보 권장"
       />
 
       <section style={styles.kpiGrid}>
-        <Kpi title="총 주문 수량" value="3,140 EA" desc="CSV 주문 데이터 합계" />
-        <Kpi title="최다 주문 품목" value="불닭볶음면" desc="최근 구간 최고 1,120 EA" />
-        <Kpi title="주문 변동 구간" value="05/03~05/08" desc="증가·감소·반등 흐름 확인" />
-        <Kpi title="추가 확보 권장" value="3종" desc="불닭 / 신라면 / 짜파게티" />
+        <Kpi title="증가 추세 품목" value="2종" desc="신라면 / 짜파게티" />
+        <Kpi title="감소 추세 품목" value="3종" desc="진라면 / 너구리 / 불닭볶음면" />
+        <Kpi title="우선 확보 품목" value="불닭볶음면" desc="가장 큰 감소 추세" />
+        <Kpi title="추가 확보 권장" value="4,000 EA" desc="불닭 2,000 / 진라면 1,200 / 너구리 800" />
       </section>
 
       <section style={styles.contentGridAnalytics}>
         <div style={styles.panel}>
-          <SectionHead label="ORDER QUANTITY TREND" title="품목별 주문 수량 추이 꺾은선 그래프" right="CSV 주문 데이터 기준 / EA 단위" />
-          <LineChart data={orderTrendData} series={trendSeries} />
+          <SectionHead label="INVENTORY TREND" title="품목별 재고 변화 꺾은선 그래프" right="임의 기간 기준 / EA 단위" />
+          <LineChart data={inventoryTrendData} series={trendSeries} />
           <div style={styles.legendRow}>
             {trendSeries.map((item) => (
               <div key={item.key} style={styles.legendItem}>
@@ -405,67 +389,39 @@ function AnalyticsPage() {
           <p style={styles.sectionLabel}>MES RECOMMENDATION</p>
           <h3 style={styles.sectionTitle}>추천 조치 사항</h3>
           <div style={styles.flow}>
-            <FlowStep number="01" title="불닭볶음면 물량 확보" desc="05/04 이후 주문량이 급증하고 있어 추가 물량 확보 우선" />
-            <FlowStep number="02" title="신라면 추가 생산 검토" desc="중간 하락 후 05/08에 재상승하므로 추가 생산 여력 확보 필요" />
-            <FlowStep number="03" title="Supply-04 부하 관리" desc="불닭 주문량 집중으로 공급부 과부하 모니터링 필요" />
-            <FlowStep number="04" title="ACR 이송 우선순위 조정" desc="주문량이 높은 품목 Bin을 우선 이송하도록 ACR 작업 큐 조정" />
+            <FlowStep number="01" title="불닭볶음면 추가 확보" desc="재고 감소 폭이 가장 크므로 2,000 EA 추가 확보 권장" />
+            <FlowStep number="02" title="진라면 안전재고 보강" desc="지속적인 하락 추세로 1,200 EA 예비 물량 확보 필요" />
+            <FlowStep number="03" title="Supply-04 부하 관리" desc="불닭 배출 작업 집중으로 공급부 과부하 모니터링 필요" />
+            <FlowStep number="04" title="ACR-03 작업 분산" desc="불닭 Bin 이송 집중 상태이므로 ACR 작업 분산 검토" />
           </div>
         </div>
       </section>
 
       <section style={styles.bottomGrid}>
         <div style={styles.panel}>
-          <p style={styles.sectionLabel}>ORDER SUMMARY</p>
-          <h3 style={styles.sectionTitle}>품목별 주문 분석 결과</h3>
+          <p style={styles.sectionLabel}>TREND SUMMARY</p>
+          <h3 style={styles.sectionTitle}>품목별 추세 분석 결과</h3>
           <div style={styles.trendCardGrid}>
-            <TrendCard title="불닭볶음면" value="급증" desc="05/06~05/07 주문 급증 / 추가 물량 확보 우선" type="danger" />
-            <TrendCard title="짜파게티" value="상승" desc="중간 하락 후 재상승 / 예비 재고 확보" type="up" />
-            <TrendCard title="너구리" value="변동" desc="증가와 감소가 반복되어 공급량 모니터링 필요" type="down" />
-            <TrendCard title="신라면" value="재상승" desc="05/07 하락 후 05/08 재상승 / 추가 생산 검토" type="up" />
+            <TrendCard title="신라면" value="증가" desc="9,200 → 12,400 EA / 공급 안정" type="up" />
+            <TrendCard title="짜파게티" value="증가" desc="8,100 → 9,700 EA / 재고 여유" type="up" />
+            <TrendCard title="진라면" value="감소" desc="8,600 → 6,400 EA / 추가 확보 필요" type="down" />
+            <TrendCard title="불닭볶음면" value="급감" desc="7,400 → 4,500 EA / 최우선 보충" type="danger" />
           </div>
         </div>
 
         <div style={styles.panel}>
-          <SectionHead label="EQUIPMENT LOAD ANALYSIS" title="공급부 및 ACR 부하 분석" right="동일 카드 디자인 적용" />
-
-          <div style={styles.equipmentSummaryGrid}>
-            <MiniInsight label="공급부 최고 부하" value="Supply-04" desc="97% · 불닭볶음면 집중" />
-            <MiniInsight label="ACR 최고 작업량" value="ACR-03" desc="55회 · Bin 이송 집중" />
-          </div>
-
-          <div style={styles.analysisGridUnified}>
-            <div style={styles.analysisBlock}>
-              <div style={styles.analysisBlockHeader}>
-                <p>SUPPLY LOAD</p>
-                <strong>공급부 사용률</strong>
-              </div>
+          <SectionHead label="EQUIPMENT ANALYSIS" title="공급부 및 ACR 분석" right="운영 부하 기준" />
+          <div style={styles.analysisGrid}>
+            <div>
+              <h4 style={styles.smallTitle}>공급부 사용률</h4>
               {supplyUtilization.map((supply) => (
-                <LoadRow
-                  key={supply.name}
-                  title={supply.name}
-                  item={supply.item}
-                  value={supply.rate}
-                  unit="%"
-                  note={supply.note}
-                />
+                <ProgressRow key={supply.name} label={`${supply.name} · ${supply.item}`} value={supply.rate} note={supply.note} />
               ))}
             </div>
-
-            <div style={styles.analysisBlock}>
-              <div style={styles.analysisBlockHeader}>
-                <p>ACR LOAD</p>
-                <strong>ACR 작업량</strong>
-              </div>
+            <div>
+              <h4 style={styles.smallTitle}>ACR 운행 분석</h4>
               {acrAnalysis.map((acr) => (
-                <LoadRow
-                  key={acr.name}
-                  title={acr.name}
-                  item={acr.item}
-                  value={acr.work}
-                  max={60}
-                  unit="회"
-                  note={acr.state}
-                />
+                <QueueItem key={acr.name} title={`${acr.name} · ${acr.item}`} desc={`금일 작업 ${acr.work}회`} status={acr.state} />
               ))}
             </div>
           </div>
@@ -475,8 +431,44 @@ function AnalyticsPage() {
   );
 }
 
-function Hero({ label, title, text }) { return <section style={styles.hero}><div><p style={styles.heroLabel}>{label}</p><h2 style={styles.heroTitle}>{title}</h2><p style={styles.heroText}>{text}</p></div></section>; }
-function EmptyPage({ title }) { return <Hero label="CODELAB SMART FACTORY MES" title={title} text="이 화면은 다음 단계에서 제작할 예정입니다." statusTitle="STATUS" statusValue="READY" statusText="화면 구성 대기" />; }
+function GlobalStyles() {
+  return (
+    <style>{`
+      @import url('https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css');
+      * { box-sizing: border-box; }
+      html, body, #root {
+        margin: 0;
+        width: 100%;
+        min-height: 100%;
+        background: #ffffff;
+        font-family: 'Pretendard', 'Noto Sans KR', 'Apple SD Gothic Neo', system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+        color: #1f2933;
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
+        text-rendering: optimizeLegibility;
+        font-size: 18px;
+      }
+      button, input {
+        font-family: 'Pretendard', 'Noto Sans KR', system-ui, sans-serif;
+      }
+      button { cursor: pointer; }
+      table { border-spacing: 0; }
+    `}</style>
+  );
+}
+
+function Hero({ label, title, text }) {
+  return (
+    <section style={styles.hero}>
+      <div>
+        <p style={styles.heroLabel}>{label}</p>
+        <h2 style={styles.heroTitle}>{title}</h2>
+        <p style={styles.heroText}>{text}</p>
+      </div>
+    </section>
+  );
+}
+function EmptyPage({ title }) { return <Hero label="CODELAB SMART FACTORY MES" title={title} text="이 화면은 다음 단계에서 제작할 예정입니다." />; }
 function SectionHead({ label, title, right }) { return <div style={styles.sectionHead}><div><p style={styles.sectionLabel}>{label}</p><h3 style={styles.sectionTitle}>{title}</h3></div><span style={styles.priorityRule}>{right}</span></div>; }
 function Kpi({ title, value, desc }) { return <div style={styles.kpiCard}><p>{title}</p><h2>{value}</h2><span>{desc}</span></div>; }
 function Metric({ label, value }) { return <div style={styles.metricRow}><span>{label}</span><strong>{value}</strong></div>; }
@@ -492,11 +484,8 @@ function LineChart({ data, series }) {
   const height = 360;
   const padding = { top: 28, right: 36, bottom: 42, left: 64 };
   const values = data.flatMap((row) => series.map((item) => row[item.key]));
-  const rawMin = Math.min(...values);
-  const rawMax = Math.max(...values);
-  const rangePadding = Math.max(10, Math.ceil((rawMax - rawMin) * 0.2));
-  const minValue = Math.max(0, Math.floor((rawMin - rangePadding) / 10) * 10);
-  const maxValue = Math.ceil((rawMax + rangePadding) / 10) * 10;
+  const minValue = Math.floor((Math.min(...values) - 400) / 1000) * 1000;
+  const maxValue = Math.ceil((Math.max(...values) + 400) / 1000) * 1000;
   const innerWidth = width - padding.left - padding.right;
   const innerHeight = height - padding.top - padding.bottom;
 
@@ -510,7 +499,7 @@ function LineChart({ data, series }) {
         {yTicks.map((tick) => (
           <g key={tick}>
             <line x1={padding.left} x2={width - padding.right} y1={getY(tick)} y2={getY(tick)} stroke="#e6e6e6" strokeWidth="1" />
-            <text x={padding.left - 12} y={getY(tick) + 4} textAnchor="end" fontSize="12" fill="#6b6b6b">{Math.round(tick).toLocaleString()}</text>
+            <text x={padding.left - 12} y={getY(tick) + 4} textAnchor="end" fontSize="14" fill="#6b6b6b">{Math.round(tick).toLocaleString()}</text>
           </g>
         ))}
 
@@ -518,7 +507,7 @@ function LineChart({ data, series }) {
         <line x1={padding.left} x2={width - padding.right} y1={height - padding.bottom} y2={height - padding.bottom} stroke="#cccccc" strokeWidth="1" />
 
         {data.map((row, index) => (
-          <text key={row.date} x={getX(index)} y={height - 16} textAnchor="middle" fontSize="12" fill="#3c3c3c">{row.date}</text>
+          <text key={row.date} x={getX(index)} y={height - 16} textAnchor="middle" fontSize="14" fill="#3c3c3c">{row.date}</text>
         ))}
 
         {series.map((item) => {
@@ -533,36 +522,6 @@ function LineChart({ data, series }) {
           );
         })}
       </svg>
-    </div>
-  );
-}
-
-function MiniInsight({ label, value, desc }) {
-  return (
-    <div style={styles.miniInsight}>
-      <p>{label}</p>
-      <h4>{value}</h4>
-      <span>{desc}</span>
-    </div>
-  );
-}
-
-function LoadRow({ title, item, value, max = 100, unit, note }) {
-  const width = Math.min(100, Math.round((value / max) * 100));
-  const isHigh = width >= 90;
-  return (
-    <div style={styles.loadRow}>
-      <div style={styles.loadHead}>
-        <div>
-          <strong>{title}</strong>
-          <span>{item}</span>
-        </div>
-        <b>{value}{unit}</b>
-      </div>
-      <div style={styles.loadTrack}>
-        <div style={{ ...styles.loadFill, width: `${width}%`, background: isHigh ? "#1a2129" : "#1c69d4" }} />
-      </div>
-      <p>{note}</p>
     </div>
   );
 }
@@ -594,78 +553,386 @@ function ProgressRow({ label, value, note }) {
 }
 
 const styles = {
-  app: { display: "flex", height: "100vh", overflow: "hidden", background: "#ffffff", color: "#262626", fontFamily: "\'Pretendard\', \'Noto Sans KR\', system-ui, -apple-system, BlinkMacSystemFont, sans-serif" },
-  sidebar: { width: 230, background: "#fafafa", borderRight: "1px solid #e6e6e6", padding: 20, flexShrink: 0 },
-  brand: { display: "flex", gap: 12, alignItems: "center", marginBottom: 28 },
-  logo: { width: 40, height: 40, background: "#1c69d4", color: "#ffffff", display: "flex", alignItems: "center", justifyContent: "center", fontWeight: 800 },
-  brandTitle: { margin: 0, fontSize: 16, fontWeight: 800 },
-  brandSub: { margin: "4px 0 0", fontSize: 10, color: "#6b6b6b", lineHeight: 1.35 },
-  nav: { display: "flex", flexDirection: "column", gap: 6 },
-  navItem: { height: 38, background: "transparent", border: "none", textAlign: "left", padding: "0 14px", fontWeight: 700, color: "#262626", cursor: "pointer", fontSize: 12 },
-  navActive: { height: 38, background: "#1a2129", color: "#ffffff", border: "none", textAlign: "left", padding: "0 14px", fontWeight: 800, cursor: "pointer", fontSize: 12 },
-  main: { flex: 1, padding: "16px 24px", overflow: "hidden" },
-  topbar: { display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 14 },
-  eyebrow: { margin: 0, color: "#1c69d4", fontSize: 10, fontWeight: 800, letterSpacing: 1.5 },
-  title: { margin: "4px 0 0", fontSize: 24, fontWeight: 700, color: "#262626" },
-  topActions: { display: "flex", gap: 8 },
-  search: { width: 280, height: 38, border: "1px solid #cccccc", padding: "0 12px", fontSize: 12 },
-  primaryBtn: { height: 38, border: "none", background: "#1c69d4", color: "#ffffff", padding: "0 18px", fontWeight: 800, fontSize: 12 },
-  secondaryBtn: { height: 38, border: "1px solid #cccccc", background: "#ffffff", color: "#262626", padding: "0 18px", fontWeight: 800, fontSize: 12 },
-  hero: { background: "#1a2129", color: "#ffffff", padding: 26, display: "flex", justifyContent: "flex-start", alignItems: "center", marginBottom: 14 },
-  heroLabel: { margin: 0, color: "#bbbbbb", fontSize: 10, fontWeight: 800, letterSpacing: 1.5 },
-  heroTitle: { margin: "8px 0", fontSize: 34, fontWeight: 700 },
-  heroText: { maxWidth: 980, color: "#bbbbbb", lineHeight: 1.45, fontSize: 13 },
-  kpiGrid: { display: "grid", gridTemplateColumns: "repeat(4, 1fr)", gap: 12, marginBottom: 14 },
-  kpiCard: { background: "#fafafa", border: "1px solid #e6e6e6", padding: 16, minHeight: 86 },
-  contentGrid: { display: "grid", gridTemplateColumns: "2fr 1fr", gap: 14, marginBottom: 14 },
-  bottomGrid: { display: "grid", gridTemplateColumns: "1fr 1fr", gap: 14, marginTop: 14 },
-  panel: { background: "#ffffff", border: "1px solid #e6e6e6", padding: 16 },
-  sectionHead: { display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 12 },
-  sectionLabel: { margin: 0, color: "#1c69d4", fontSize: 10, fontWeight: 800, letterSpacing: 1.5 },
-  sectionTitle: { margin: "4px 0 0", fontSize: 18, fontWeight: 800, color: "#262626" },
-  priorityRule: { fontSize: 11, color: "#6b6b6b", fontWeight: 700 },
-  table: { width: "100%", borderCollapse: "collapse", tableLayout: "fixed", fontSize: 11 },
-  th: { textAlign: "left", padding: "8px 8px", borderBottom: "1px solid #e6e6e6", color: "#6b6b6b", fontSize: 10, fontWeight: 800 },
-  thWide: { textAlign: "left", padding: "8px 8px", borderBottom: "1px solid #e6e6e6", color: "#6b6b6b", fontSize: 10, fontWeight: 800, width: "34%" },
-  td: { padding: "9px 8px", borderBottom: "1px solid #e6e6e6", color: "#262626", verticalAlign: "middle", lineHeight: 1.3 },
-  tdStrong: { padding: "9px 8px", borderBottom: "1px solid #e6e6e6", color: "#1a2129", fontWeight: 800 },
-  boxBadge: { display: "inline-block", border: "1px solid", padding: "4px 6px", fontSize: 10, fontWeight: 800 },
-  status: { display: "inline-block", background: "#f7f7f7", border: "1px solid #cccccc", padding: "4px 6px", fontSize: 10, fontWeight: 800 },
-  gaugeBox: { display: "flex", justifyContent: "center", margin: "18px 0" },
-  gauge: { width: 146, height: 146, borderRadius: "50%", display: "flex", alignItems: "center", justifyContent: "center" },
-  gaugeInner: { width: 96, height: 96, borderRadius: "50%", background: "#ffffff", display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", fontSize: 12 },
-  metricRow: { display: "flex", justifyContent: "space-between", padding: "9px 0", borderTop: "1px solid #e6e6e6", fontSize: 12 },
-  fullBtn: { width: "100%", height: 38, marginTop: 10, background: "#1c69d4", color: "#ffffff", border: "none", fontWeight: 800, fontSize: 12 },
-  boxGrid: { display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: 10, marginTop: 12 },
-  boxGridSingle: { display: "grid", gridTemplateColumns: "1fr", gap: 10, marginTop: 12 },
-  boxSummary: { background: "#fafafa", border: "1px solid #e6e6e6", padding: 14, fontSize: 12 },
-  queueList: { display: "flex", flexDirection: "column", gap: 8, marginTop: 12 },
-  queueItem: { display: "flex", justifyContent: "space-between", alignItems: "center", background: "#fafafa", border: "1px solid #e6e6e6", padding: 10, gap: 10, fontSize: 12 },
-  flow: { display: "flex", flexDirection: "column", gap: 8, marginTop: 12 },
-  flowStep: { display: "flex", gap: 10, background: "#fafafa", border: "1px solid #e6e6e6", padding: 10, fontSize: 12 },
-
-  contentGridAnalytics: { display: "grid", gridTemplateColumns: "2fr 1fr", gap: 14, marginBottom: 14 },
-  chartWrap: { width: "100%", height: 270, marginTop: 12, background: "#fafafa", border: "1px solid #e6e6e6", padding: 8 },
+  app: {
+    display: "flex",
+    minHeight: "100vh",
+    background: "#ffffff",
+    color: "#1f2933",
+    fontFamily: "'Pretendard', 'Noto Sans KR', 'Apple SD Gothic Neo', system-ui, sans-serif",
+    fontSize: 18,
+    lineHeight: 1.65,
+  },
+  sidebar: {
+    width: 310,
+    background: "#fafafa",
+    borderRight: "1px solid #e6e6e6",
+    padding: "34px 30px",
+    flexShrink: 0,
+    position: "sticky",
+    top: 0,
+    minHeight: "100vh",
+  },
+  brand: { display: "flex", gap: 14, alignItems: "center", marginBottom: 44 },
+  logo: {
+    width: 54,
+    height: 54,
+    background: "#1c69d4",
+    color: "#ffffff",
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
+    fontWeight: 800,
+    fontSize: 17,
+    letterSpacing: 0.3,
+  },
+  brandTitle: { margin: 0, fontSize: 23, fontWeight: 800, letterSpacing: -0.2, lineHeight: 1.25 },
+  brandSub: { margin: "8px 0 0", fontSize: 15, color: "#5f6b76", lineHeight: 1.45, fontWeight: 500 },
+  nav: { display: "flex", flexDirection: "column", gap: 12 },
+  navItem: {
+    height: 56,
+    background: "transparent",
+    border: "none",
+    textAlign: "left",
+    padding: "0 16px",
+    fontWeight: 700,
+    color: "#1f2933",
+    cursor: "pointer",
+    fontSize: 17,
+  },
+  navActive: {
+    height: 56,
+    background: "#1a2129",
+    color: "#ffffff",
+    border: "none",
+    textAlign: "left",
+    padding: "0 16px",
+    fontWeight: 800,
+    cursor: "pointer",
+    fontSize: 17,
+  },
+  main: {
+    flex: 1,
+    padding: "42px 56px 80px",
+    overflow: "visible",
+    minWidth: 0,
+  },
+  topbar: {
+    display: "flex",
+    justifyContent: "space-between",
+    alignItems: "center",
+    gap: 24,
+    marginBottom: 28,
+  },
+  eyebrow: {
+    margin: 0,
+    color: "#1c69d4",
+    fontSize: 17,
+    fontWeight: 800,
+    letterSpacing: 1.6,
+  },
+  title: {
+    margin: "8px 0 0",
+    fontSize: 42,
+    fontWeight: 800,
+    color: "#1f2933",
+    letterSpacing: -0.8,
+    lineHeight: 1.18,
+  },
+  topActions: { display: "flex", gap: 10, alignItems: "center", flexShrink: 0 },
+  search: {
+    width: 420,
+    height: 56,
+    border: "1px solid #cfd6dd",
+    padding: "0 16px",
+    fontSize: 17,
+    color: "#1f2933",
+    outline: "none",
+  },
+  primaryBtn: {
+    height: 56,
+    border: "none",
+    background: "#1c69d4",
+    color: "#ffffff",
+    padding: "0 24px",
+    fontWeight: 800,
+    fontSize: 17,
+  },
+  secondaryBtn: {
+    height: 56,
+    border: "1px solid #cfd6dd",
+    background: "#ffffff",
+    color: "#1f2933",
+    padding: "0 24px",
+    fontWeight: 800,
+    fontSize: 17,
+  },
+  hero: {
+    background: "#1a2129",
+    color: "#ffffff",
+    padding: "58px 64px",
+    display: "flex",
+    justifyContent: "flex-start",
+    alignItems: "center",
+    marginBottom: 28,
+    minHeight: 230,
+  },
+  heroLabel: {
+    margin: 0,
+    color: "#c6cbd1",
+    fontSize: 17,
+    fontWeight: 800,
+    letterSpacing: 1.6,
+  },
+  heroTitle: {
+    margin: "14px 0 12px",
+    fontSize: 56,
+    fontWeight: 800,
+    letterSpacing: -1.0,
+    lineHeight: 1.15,
+  },
+  heroText: {
+    maxWidth: 1080,
+    color: "#d3d7dc",
+    lineHeight: 1.75,
+    fontSize: 20,
+    fontWeight: 500,
+    margin: 0,
+  },
+  kpiGrid: {
+    display: "grid",
+    gridTemplateColumns: "repeat(auto-fit, minmax(310px, 1fr))",
+    gap: 24,
+    marginBottom: 32,
+  },
+  kpiCard: {
+    background: "#fafafa",
+    border: "1px solid #e1e5e9",
+    padding: "32px 34px",
+    minHeight: 155,
+    fontSize: 18,
+    lineHeight: 1.45,
+  },
+  contentGrid: {
+    display: "grid",
+    gridTemplateColumns: "minmax(0, 2fr) minmax(500px, 1fr)",
+    gap: 34,
+    marginBottom: 34,
+    alignItems: "start",
+  },
+  bottomGrid: {
+    display: "grid",
+    gridTemplateColumns: "repeat(2, minmax(0, 1fr))",
+    gap: 34,
+    marginTop: 34,
+  },
+  panel: {
+    background: "#ffffff",
+    border: "1px solid #e1e5e9",
+    padding: "36px 38px",
+  },
+  sectionHead: {
+    display: "flex",
+    justifyContent: "space-between",
+    alignItems: "flex-start",
+    gap: 20,
+    marginBottom: 22,
+  },
+  sectionLabel: {
+    margin: 0,
+    color: "#1c69d4",
+    fontSize: 17,
+    fontWeight: 800,
+    letterSpacing: 1.6,
+  },
+  sectionTitle: {
+    margin: "8px 0 0",
+    fontSize: 30,
+    fontWeight: 800,
+    color: "#1f2933",
+    letterSpacing: -0.4,
+    lineHeight: 1.25,
+  },
+  priorityRule: { fontSize: 16, color: "#5f6b76", fontWeight: 700, lineHeight: 1.5 },
+  table: {
+    width: "100%",
+    borderCollapse: "collapse",
+    tableLayout: "fixed",
+    fontSize: 17,
+    lineHeight: 1.65,
+  },
+  th: {
+    textAlign: "left",
+    padding: "14px 12px",
+    borderBottom: "1px solid #e1e5e9",
+    color: "#5f6b76",
+    fontSize: 17,
+    fontWeight: 800,
+    lineHeight: 1.45,
+  },
+  thWide: {
+    textAlign: "left",
+    padding: "14px 12px",
+    borderBottom: "1px solid #e1e5e9",
+    color: "#5f6b76",
+    fontSize: 13,
+    fontWeight: 800,
+    width: "34%",
+    lineHeight: 1.4,
+  },
+  td: {
+    padding: "20px 14px",
+    borderBottom: "1px solid #e8ecef",
+    color: "#1f2933",
+    verticalAlign: "middle",
+    lineHeight: 1.55,
+    fontWeight: 500,
+    wordBreak: "keep-all",
+  },
+  tdStrong: {
+    padding: "20px 14px",
+    borderBottom: "1px solid #e8ecef",
+    color: "#111827",
+    fontWeight: 800,
+    lineHeight: 1.55,
+  },
+  boxBadge: {
+    display: "inline-block",
+    border: "1px solid",
+    padding: "6px 10px",
+    fontSize: 14,
+    fontWeight: 800,
+    lineHeight: 1.2,
+    whiteSpace: "nowrap",
+  },
+  status: {
+    display: "inline-block",
+    background: "#f7f7f7",
+    border: "1px solid #cfd6dd",
+    padding: "6px 10px",
+    fontSize: 14,
+    fontWeight: 800,
+    lineHeight: 1.2,
+    color: "#1f2933",
+    whiteSpace: "nowrap",
+  },
+  gaugeBox: { display: "flex", justifyContent: "center", margin: "34px 0" },
+  gauge: { width: 210, height: 210, borderRadius: "50%", display: "flex", alignItems: "center", justifyContent: "center" },
+  gaugeInner: {
+    width: 140,
+    height: 140,
+    borderRadius: "50%",
+    background: "#ffffff",
+    display: "flex",
+    flexDirection: "column",
+    alignItems: "center",
+    justifyContent: "center",
+    fontSize: 18,
+  },
+  metricRow: {
+    display: "flex",
+    justifyContent: "space-between",
+    gap: 14,
+    padding: "15px 0",
+    borderTop: "1px solid #e1e5e9",
+    fontSize: 17,
+    lineHeight: 1.5,
+  },
+  fullBtn: {
+    width: "100%",
+    height: 60,
+    marginTop: 18,
+    background: "#1c69d4",
+    color: "#ffffff",
+    border: "none",
+    fontWeight: 800,
+    fontSize: 17,
+  },
+  boxGrid: { display: "grid", gridTemplateColumns: "repeat(3, minmax(0, 1fr))", gap: 16, marginTop: 22 },
+  boxGridSingle: { display: "grid", gridTemplateColumns: "1fr", gap: 16, marginTop: 22 },
+  boxSummary: {
+    background: "#fafafa",
+    border: "1px solid #e1e5e9",
+    padding: "28px 26px",
+    fontSize: 18,
+    lineHeight: 1.45,
+  },
+  queueList: { display: "flex", flexDirection: "column", gap: 14, marginTop: 22 },
+  queueItem: {
+    display: "flex",
+    justifyContent: "space-between",
+    alignItems: "center",
+    background: "#fafafa",
+    border: "1px solid #e1e5e9",
+    padding: "18px 20px",
+    gap: 18,
+    fontSize: 17,
+    lineHeight: 1.55,
+  },
+  flow: { display: "flex", flexDirection: "column", gap: 16, marginTop: 22 },
+  flowStep: {
+    display: "flex",
+    gap: 18,
+    background: "#fafafa",
+    border: "1px solid #e1e5e9",
+    padding: "20px",
+    fontSize: 17,
+    lineHeight: 1.65,
+  },
+  contentGridAnalytics: {
+    display: "grid",
+    gridTemplateColumns: "minmax(0, 2fr) minmax(500px, 1fr)",
+    gap: 34,
+    marginBottom: 34,
+    alignItems: "start",
+  },
+  chartWrap: {
+    width: "100%",
+    height: 560,
+    marginTop: 22,
+    background: "#fafafa",
+    border: "1px solid #e1e5e9",
+    padding: 18,
+  },
   svgChart: { width: "100%", height: "100%", display: "block" },
-  legendRow: { display: "flex", gap: 12, flexWrap: "wrap", marginTop: 10, fontSize: 11, color: "#3c3c3c" },
-  legendItem: { display: "flex", alignItems: "center", gap: 8, fontWeight: 700 },
-  legendDot: { width: 12, height: 12, display: "inline-block" },
-  trendCardGrid: { display: "grid", gridTemplateColumns: "repeat(2, 1fr)", gap: 10, marginTop: 12 },
-  trendCard: { background: "#fafafa", border: "1px solid #e6e6e6", padding: 12, fontSize: 12 },
-  analysisGrid: { display: "grid", gridTemplateColumns: "1fr 1fr", gap: 12, marginTop: 12 },
-  smallTitle: { margin: "0 0 10px", fontSize: 14, fontWeight: 800, color: "#262626" },
-  progressRow: { marginBottom: 10 },
-  progressHead: { display: "flex", justifyContent: "space-between", alignItems: "center", fontSize: 13, fontWeight: 800, marginBottom: 8 },
-  progressTrack: { height: 8, background: "#ebebeb", border: "1px solid #e6e6e6" },
+  legendRow: {
+    display: "flex",
+    gap: 22,
+    flexWrap: "wrap",
+    marginTop: 18,
+    fontSize: 17,
+    color: "#3c4650",
+    lineHeight: 1.4,
+  },
+  legendItem: { display: "flex", alignItems: "center", gap: 9, fontWeight: 700 },
+  legendDot: { width: 13, height: 13, display: "inline-block" },
+  trendCardGrid: { display: "grid", gridTemplateColumns: "repeat(2, minmax(0, 1fr))", gap: 18, marginTop: 22 },
+  trendCard: {
+    background: "#fafafa",
+    border: "1px solid #e1e5e9",
+    padding: "22px 20px",
+    fontSize: 17,
+    lineHeight: 1.655,
+  },
+  analysisGrid: { display: "grid", gridTemplateColumns: "1fr 1fr", gap: 22, marginTop: 20 },
+  smallTitle: { margin: "0 0 18px", fontSize: 22, fontWeight: 800, color: "#1f2933", lineHeight: 1.3 },
+  progressRow: { marginBottom: 22, fontSize: 17, lineHeight: 1.45 },
+  progressHead: {
+    display: "flex",
+    justifyContent: "space-between",
+    alignItems: "center",
+    fontSize: 17,
+    fontWeight: 800,
+    marginBottom: 9,
+  },
+  progressTrack: { height: 12, background: "#ebebeb", border: "1px solid #e1e5e9" },
   progressFill: { height: "100%", background: "#1c69d4" },
-  equipmentSummaryGrid: { display: "grid", gridTemplateColumns: "1fr 1fr", gap: 10, marginTop: 12, marginBottom: 12 },
-  miniInsight: { background: "#fafafa", border: "1px solid #e6e6e6", padding: 12, fontSize: 12 },
-  analysisGridUnified: { display: "grid", gridTemplateColumns: "1fr 1fr", gap: 12 },
-  analysisBlock: { background: "#ffffff", border: "1px solid #e6e6e6", padding: 12, fontSize: 12 },
-  analysisBlockHeader: { borderBottom: "1px solid #e6e6e6", paddingBottom: 8, marginBottom: 10 },
-  loadRow: { padding: "8px 0", borderBottom: "1px solid #f0f0f0" },
-  loadHead: { display: "flex", justifyContent: "space-between", alignItems: "flex-start", gap: 12, marginBottom: 8 },
-  loadTrack: { height: 8, background: "#ebebeb", border: "1px solid #e6e6e6" },
-  loadFill: { height: "100%" },
-  noticeBox: { marginTop: 12, background: "#f7f7f7", border: "1px solid #e6e6e6", padding: 12, lineHeight: 1.4, fontSize: 12 },
+  noticeBox: {
+    marginTop: 22,
+    background: "#f7f7f7",
+    border: "1px solid #e1e5e9",
+    padding: "18px 20px",
+    lineHeight: 1.65,
+    fontSize: 17,
+    color: "#1f2933",
+  },
 };
