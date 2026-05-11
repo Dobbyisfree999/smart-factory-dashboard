@@ -74,13 +74,15 @@ const preventiveSchedule = [
 ];
 
 
-const inventoryTrendData = [
-  { date: "05/01", shin: 9200, jin: 8600, neoguri: 7800, buldak: 7400, japagetti: 8100 },
-  { date: "05/02", shin: 9800, jin: 8200, neoguri: 7650, buldak: 6900, japagetti: 8350 },
-  { date: "05/03", shin: 10500, jin: 7700, neoguri: 7400, buldak: 6300, japagetti: 8650 },
-  { date: "05/04", shin: 11200, jin: 7200, neoguri: 7000, buldak: 5700, japagetti: 9000 },
-  { date: "05/05", shin: 11800, jin: 6800, neoguri: 6750, buldak: 5100, japagetti: 9350 },
-  { date: "05/06", shin: 12400, jin: 6400, neoguri: 6500, buldak: 4500, japagetti: 9700 },
+const orderTrendData = [
+  { date: "05/01", shin: 420, jin: 620, neoguri: 350, buldak: 700, japagetti: 520 },
+  { date: "05/02", shin: 510, jin: 580, neoguri: 490, buldak: 640, japagetti: 610 },
+  { date: "05/03", shin: 760, jin: 530, neoguri: 430, buldak: 760, japagetti: 590 },
+  { date: "05/04", shin: 690, jin: 610, neoguri: 570, buldak: 880, japagetti: 670 },
+  { date: "05/05", shin: 850, jin: 560, neoguri: 520, buldak: 810, japagetti: 760 },
+  { date: "05/06", shin: 980, jin: 520, neoguri: 650, buldak: 980, japagetti: 720 },
+  { date: "05/07", shin: 900, jin: 600, neoguri: 590, buldak: 1120, japagetti: 800 },
+  { date: "05/08", shin: 1100, jin: 570, neoguri: 720, buldak: 1040, japagetti: 890 },
 ];
 
 const trendSeries = [
@@ -358,23 +360,23 @@ function AnalyticsPage() {
       <Hero
         label="DATA ANALYTICS & OPERATION INSIGHT"
         title="분석 대시보드"
-        text="임의 기간별 재고 변화 데이터를 꺾은선 그래프로 시각화하고, 감소 추세 품목에 대해 추가 물량 확보와 설비 운영 전략을 제안합니다."
-        statusTitle="ANALYSIS RESULT"
-        statusValue="ACTION REQUIRED"
-        statusText="불닭볶음면 / 진라면 추가 확보 권장"
+        text="CSV 주문 데이터를 기간별로 나누어 각 품목의 주문 유입 수량을 꺾은선 그래프로 시각화하고, 주문량이 높은 품목에 대해 추가 재고 확보와 공급부 운영 전략을 제안합니다."
+        statusTitle="ORDER ANALYSIS"
+        statusValue="HIGH DEMAND"
+        statusText="불닭볶음면 / 신라면 추가 물량 확보 권장"
       />
 
       <section style={styles.kpiGrid}>
-        <Kpi title="증가 추세 품목" value="2종" desc="신라면 / 짜파게티" />
-        <Kpi title="감소 추세 품목" value="3종" desc="진라면 / 너구리 / 불닭볶음면" />
-        <Kpi title="우선 확보 품목" value="불닭볶음면" desc="가장 큰 감소 추세" />
-        <Kpi title="추가 확보 권장" value="4,000 EA" desc="불닭 2,000 / 진라면 1,200 / 너구리 800" />
+        <Kpi title="총 주문 수량" value="3,140 EA" desc="CSV 주문 데이터 합계" />
+        <Kpi title="최다 주문 품목" value="불닭볶음면" desc="최근 구간 최고 1,120 EA" />
+        <Kpi title="주문 변동 구간" value="05/03~05/08" desc="증가·감소·반등 흐름 확인" />
+        <Kpi title="추가 확보 권장" value="3종" desc="불닭 / 신라면 / 짜파게티" />
       </section>
 
       <section style={styles.contentGridAnalytics}>
         <div style={styles.panel}>
-          <SectionHead label="INVENTORY TREND" title="품목별 재고 변화 꺾은선 그래프" right="임의 기간 기준 / EA 단위" />
-          <LineChart data={inventoryTrendData} series={trendSeries} />
+          <SectionHead label="ORDER QUANTITY TREND" title="품목별 주문 수량 추이 꺾은선 그래프" right="CSV 주문 데이터 기준 / EA 단위" />
+          <LineChart data={orderTrendData} series={trendSeries} />
           <div style={styles.legendRow}>
             {trendSeries.map((item) => (
               <div key={item.key} style={styles.legendItem}>
@@ -389,39 +391,67 @@ function AnalyticsPage() {
           <p style={styles.sectionLabel}>MES RECOMMENDATION</p>
           <h3 style={styles.sectionTitle}>추천 조치 사항</h3>
           <div style={styles.flow}>
-            <FlowStep number="01" title="불닭볶음면 추가 확보" desc="재고 감소 폭이 가장 크므로 2,000 EA 추가 확보 권장" />
-            <FlowStep number="02" title="진라면 안전재고 보강" desc="지속적인 하락 추세로 1,200 EA 예비 물량 확보 필요" />
-            <FlowStep number="03" title="Supply-04 부하 관리" desc="불닭 배출 작업 집중으로 공급부 과부하 모니터링 필요" />
-            <FlowStep number="04" title="ACR-03 작업 분산" desc="불닭 Bin 이송 집중 상태이므로 ACR 작업 분산 검토" />
+            <FlowStep number="01" title="불닭볶음면 물량 확보" desc="05/04 이후 주문량이 급증하고 있어 추가 물량 확보 우선" />
+            <FlowStep number="02" title="신라면 추가 생산 검토" desc="중간 하락 후 05/08에 재상승하므로 추가 생산 여력 확보 필요" />
+            <FlowStep number="03" title="Supply-04 부하 관리" desc="불닭 주문량 집중으로 공급부 과부하 모니터링 필요" />
+            <FlowStep number="04" title="ACR 이송 우선순위 조정" desc="주문량이 높은 품목 Bin을 우선 이송하도록 ACR 작업 큐 조정" />
           </div>
         </div>
       </section>
 
       <section style={styles.bottomGrid}>
         <div style={styles.panel}>
-          <p style={styles.sectionLabel}>TREND SUMMARY</p>
-          <h3 style={styles.sectionTitle}>품목별 추세 분석 결과</h3>
+          <p style={styles.sectionLabel}>ORDER SUMMARY</p>
+          <h3 style={styles.sectionTitle}>품목별 주문 분석 결과</h3>
           <div style={styles.trendCardGrid}>
-            <TrendCard title="신라면" value="증가" desc="9,200 → 12,400 EA / 공급 안정" type="up" />
-            <TrendCard title="짜파게티" value="증가" desc="8,100 → 9,700 EA / 재고 여유" type="up" />
-            <TrendCard title="진라면" value="감소" desc="8,600 → 6,400 EA / 추가 확보 필요" type="down" />
-            <TrendCard title="불닭볶음면" value="급감" desc="7,400 → 4,500 EA / 최우선 보충" type="danger" />
+            <TrendCard title="불닭볶음면" value="급증" desc="05/06~05/07 주문 급증 / 추가 물량 확보 우선" type="danger" />
+            <TrendCard title="짜파게티" value="상승" desc="중간 하락 후 재상승 / 예비 재고 확보" type="up" />
+            <TrendCard title="너구리" value="변동" desc="증가와 감소가 반복되어 공급량 모니터링 필요" type="down" />
+            <TrendCard title="신라면" value="재상승" desc="05/07 하락 후 05/08 재상승 / 추가 생산 검토" type="up" />
           </div>
         </div>
 
         <div style={styles.panel}>
-          <SectionHead label="EQUIPMENT ANALYSIS" title="공급부 및 ACR 분석" right="운영 부하 기준" />
-          <div style={styles.analysisGrid}>
-            <div>
-              <h4 style={styles.smallTitle}>공급부 사용률</h4>
+          <SectionHead label="EQUIPMENT LOAD ANALYSIS" title="공급부 및 ACR 부하 분석" right="동일 카드 디자인 적용" />
+
+          <div style={styles.equipmentSummaryGrid}>
+            <MiniInsight label="공급부 최고 부하" value="Supply-04" desc="97% · 불닭볶음면 집중" />
+            <MiniInsight label="ACR 최고 작업량" value="ACR-03" desc="55회 · Bin 이송 집중" />
+          </div>
+
+          <div style={styles.analysisGridUnified}>
+            <div style={styles.analysisBlock}>
+              <div style={styles.analysisBlockHeader}>
+                <p>SUPPLY LOAD</p>
+                <strong>공급부 사용률</strong>
+              </div>
               {supplyUtilization.map((supply) => (
-                <ProgressRow key={supply.name} label={`${supply.name} · ${supply.item}`} value={supply.rate} note={supply.note} />
+                <LoadRow
+                  key={supply.name}
+                  title={supply.name}
+                  item={supply.item}
+                  value={supply.rate}
+                  unit="%"
+                  note={supply.note}
+                />
               ))}
             </div>
-            <div>
-              <h4 style={styles.smallTitle}>ACR 운행 분석</h4>
+
+            <div style={styles.analysisBlock}>
+              <div style={styles.analysisBlockHeader}>
+                <p>ACR LOAD</p>
+                <strong>ACR 작업량</strong>
+              </div>
               {acrAnalysis.map((acr) => (
-                <QueueItem key={acr.name} title={`${acr.name} · ${acr.item}`} desc={`금일 작업 ${acr.work}회`} status={acr.state} />
+                <LoadRow
+                  key={acr.name}
+                  title={acr.name}
+                  item={acr.item}
+                  value={acr.work}
+                  max={60}
+                  unit="회"
+                  note={acr.state}
+                />
               ))}
             </div>
           </div>
@@ -484,8 +514,11 @@ function LineChart({ data, series }) {
   const height = 360;
   const padding = { top: 28, right: 36, bottom: 42, left: 64 };
   const values = data.flatMap((row) => series.map((item) => row[item.key]));
-  const minValue = Math.floor((Math.min(...values) - 400) / 1000) * 1000;
-  const maxValue = Math.ceil((Math.max(...values) + 400) / 1000) * 1000;
+  const rawMin = Math.min(...values);
+  const rawMax = Math.max(...values);
+  const rangePadding = Math.max(10, Math.ceil((rawMax - rawMin) * 0.2));
+  const minValue = Math.max(0, Math.floor((rawMin - rangePadding) / 10) * 10);
+  const maxValue = Math.ceil((rawMax + rangePadding) / 10) * 10;
   const innerWidth = width - padding.left - padding.right;
   const innerHeight = height - padding.top - padding.bottom;
 
@@ -499,7 +532,7 @@ function LineChart({ data, series }) {
         {yTicks.map((tick) => (
           <g key={tick}>
             <line x1={padding.left} x2={width - padding.right} y1={getY(tick)} y2={getY(tick)} stroke="#e6e6e6" strokeWidth="1" />
-            <text x={padding.left - 12} y={getY(tick) + 4} textAnchor="end" fontSize="14" fill="#6b6b6b">{Math.round(tick).toLocaleString()}</text>
+            <text x={padding.left - 12} y={getY(tick) + 4} textAnchor="end" fontSize="15" fill="#6b6b6b">{Math.round(tick).toLocaleString()}</text>
           </g>
         ))}
 
@@ -507,7 +540,7 @@ function LineChart({ data, series }) {
         <line x1={padding.left} x2={width - padding.right} y1={height - padding.bottom} y2={height - padding.bottom} stroke="#cccccc" strokeWidth="1" />
 
         {data.map((row, index) => (
-          <text key={row.date} x={getX(index)} y={height - 16} textAnchor="middle" fontSize="14" fill="#3c3c3c">{row.date}</text>
+          <text key={row.date} x={getX(index)} y={height - 16} textAnchor="middle" fontSize="15" fill="#3c3c3c">{row.date}</text>
         ))}
 
         {series.map((item) => {
@@ -522,6 +555,36 @@ function LineChart({ data, series }) {
           );
         })}
       </svg>
+    </div>
+  );
+}
+
+function MiniInsight({ label, value, desc }) {
+  return (
+    <div style={styles.miniInsight}>
+      <p>{label}</p>
+      <h4>{value}</h4>
+      <span>{desc}</span>
+    </div>
+  );
+}
+
+function LoadRow({ title, item, value, max = 100, unit, note }) {
+  const width = Math.min(100, Math.round((value / max) * 100));
+  const isHigh = width >= 90;
+  return (
+    <div style={styles.loadRow}>
+      <div style={styles.loadHead}>
+        <div>
+          <strong>{title}</strong>
+          <span>{item}</span>
+        </div>
+        <b>{value}{unit}</b>
+      </div>
+      <div style={styles.loadTrack}>
+        <div style={{ ...styles.loadFill, width: `${width}%`, background: isHigh ? "#1a2129" : "#1c69d4" }} />
+      </div>
+      <p>{note}</p>
     </div>
   );
 }
